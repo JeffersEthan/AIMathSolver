@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.header, .footer, .drawboard {
+    width: 100vw;
+    height: 20vh;
+}
+
+canvas {
+    border: 1px black solid;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.footer button {
+    width: 5vw;
+    height: 3vh;
+}
