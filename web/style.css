@@ -3,13 +3,30 @@ body {
     overflow: hidden;
 }
 
+.radio input[type="radio"]{
+    display: block;
+}
+
+.sidebar{
+    width: 10vw;
+    height: 30vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .header, .footer {
     width: 100vw;
     height: 20vh;
 }
 
-.content {
-    width: 100vw;
+.canvas-content {
+    width: 90vw;
     height: 30vw;
 }
 
@@ -19,7 +36,7 @@ canvas {
     border: 1px black solid;
 }
 
-.content, .footer {
+.canvas-content, .footer {
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -8,8 +8,24 @@
 </head>
 <body>
     <div class="header">Enter an expression</div>
+
     <div class="content">
-        <canvas width="400" height="400"></canvas>
+        <div class="sidebar">
+            <button id="clear-button">Clear</button>
+            <form class="radio">
+                <label for="erase">Erase</label>
+                <input type="radio" id="erase" name="erase" value="erase">
+
+                <label for="line">Line Tool</label>
+                <input type="radio" id="line" name="line" value="line">
+            </form>
+            <label for="width">Width:</label>
+            <input type="range" id="width" name="width" min="0" max="10" value="1">
+        </div>
+
+        <div class="canvas-content">
+            <canvas width="400" height="400"></canvas>
+        </div>
     </div>
     <div class="footer">
         <button id="submit-button">Submit</button>

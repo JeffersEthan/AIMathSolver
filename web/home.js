@@ -1,8 +1,11 @@
 
+let colorLine = '#000'
+
 function initDrawingArea() {
     const canvas = document.getElementsByTagName('canvas')[0];
     const context = canvas.getContext('2d');
-    context.fillStyle = '#000';
+    context.fillStyle = colorLine;
+
 
     let source = [];
     let isDragging = false;
@@ -36,4 +39,52 @@ function draw(source, target, canvas) {
     ctx.stroke();
 }
 
-window.onload = initDrawingArea
+const sideBarActivity = () => {
+    onClearButton();
+    onWidthChange();
+    onRadioChange();
+}
+
+const onClearButton = () => {
+    let clearButton = document.getElementById('clear-button');
+    clearButton.addEventListener('click', () => {
+        let canvas = document.getElementsByTagName('canvas')[0];
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+
+}
+
+const onRadioChange = () => {
+    let erase = document.getElementById('erase');
+    let regLine = document.getElementById('line');
+
+    erase.addEventListener('click', () => {
+        erase.checked = true;
+        regLine.checked = false;
+        let canvas = document.getElementsByTagName('canvas')[0];
+        const context = canvas.getContext('2d');
+        context.fillStyle = "FFF";
+
+    });
+
+    regLine.addEventListener('click', () => {
+        erase.checked = false;
+        regLine.checked = true;
+        let canvas = document.getElementsByTagName('canvas')[0];
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#000';
+    });
+
+}
+
+const onWidthChange = () => {
+
+}
+
+window.onload = () => {
+    sideBarActivity()
+    initDrawingArea()
+
+}
