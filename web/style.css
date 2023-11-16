@@ -3,16 +3,23 @@ body {
     overflow: hidden;
 }
 
-.header, .footer, .drawboard {
+.header, .footer {
     width: 100vw;
     height: 20vh;
 }
 
+.content {
+    width: 100vw;
+    height: 30vw;
+}
+
 canvas {
+    width: 30vw;
+    aspect-ratio: 1/1;
     border: 1px black solid;
 }
 
-.footer {
+.content, .footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
