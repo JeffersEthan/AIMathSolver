@@ -1,0 +1,64 @@
+#getStarted, #howTo {
+    min-width: 187px;
+    min-height: 47px;
+    border-radius: 5px;
+    border: transparent;
+    color: white;
+    font-weight: bold;
+}
+
+#getStarted {
+    background-color: #5DBB37;
+}
+
+#howTo {
+    background-color: #3897f0;
+}
+
+#getStarted:hover {
+    background-color: #8EE56A;
+    cursor: pointer;
+}
+
+#howTo:hover {
+    background-color: #88C1F6;
+    cursor: pointer;
+}
+
+#allElements {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto Mono", monospace;
+
+}
+
+#title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 0;
+    margin: 15px 0px 0px 0px;
+}
+
+#title h1 {
+    margin: 0;
+}
+
+img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
