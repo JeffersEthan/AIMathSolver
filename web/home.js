@@ -1,52 +1,39 @@
-/**
- * Initializes event handlers for the core elements of the page
- * (i.e. canvas, eraser button)
- */
+
 function initDrawingArea() {
     const canvas = document.getElementsByTagName('canvas')[0];
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#000';
 
+    let source = [];
     let isDragging = false;
-    // update boolean value 'isDragging' when mouse is pressed down over canvas.
-    canvas.onmousedown = () => {
+
+    canvas.onmousedown = (e) => {
+        source = getCurrentCoordinates(e)
         isDragging = true;
     };
-    // update boolean value 'isDragging' when mouse is pressed down anywhere on document.
-    // the event handler is set to the whole document in case the user drags their mouse off the canvas.
     document.onmouseup = () => {
         isDragging = false;
     };
-    // turn off eraser when user selects color chooser.
-    // event handler for drawing to/erasing from the canvas.
     canvas.onmousemove = (event) => {
         if (isDragging) {
-            draw(canvas, event);
+            const target = getCurrentCoordinates(event)
+            draw(source, target, canvas);
+            source = target
         }
     };
 }
 
-/**
- * Draws a shape to the canvas at the location of the user's mouse.
- * @param canvas Canvas element being drawn to.
- * @param event Mouse event within the canvas.
- * @param erase True if the user wants to erase from the canvas;
- *              false if the user wants to draw to the canvas
- */
-function draw(canvas, event, erase=false) {
+function getCurrentCoordinates(event) {
+    const canvasLocation = document.getElementsByTagName('canvas')[0].getBoundingClientRect();
+    return [event.clientX - canvasLocation.left, event.clientY - canvasLocation.top];
+}
 
-    const context = canvas.getContext('2d');
-    const canvasLocation = canvas.getBoundingClientRect();
-    const xCoordinate = event.clientX - canvasLocation.left;
-    const yCoordinate = event.clientY - canvasLocation.top;
-
-    if (erase) {    // erase from canvas
-        context.globalCompositeOperation = 'destination-out';
-        context.arc(xCoordinate, yCoordinate, 5, 0, 2 * Math.PI);
-        context.fill();
-    } else {        // draw to canvas
-        context.globalCompositeOperation = 'source-over';
-        context.fillStyle = '#000';
-        context.fillRect(xCoordinate, yCoordinate, 8, 8);
-    }
+function draw(source, target, canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.moveTo(source[0], source[1]);
+    ctx.lineTo(target[0], target[1]);
+    ctx.stroke();
 }
 
 window.onload = initDrawingArea
