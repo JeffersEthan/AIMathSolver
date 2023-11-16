@@ -36,4 +36,36 @@ function draw(source, target, canvas) {
     ctx.stroke();
 }
 
-window.onload = initDrawingArea
+function convertToPng() {
+    const canvas = document.getElementsByTagName('canvas')[0]
+    return canvas.toDataURL('image/png')
+}
+
+function displayTranslation(data) {
+    // this will be for displaying the response from the server containing the translated expression (the data parameter)
+}
+
+function sendData(data) {
+    return fetch(`http://127.0.0.1:5000/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            'image': data
+        }
+    });
+}
+
+// this will be the base method for sending image to the server and displaying the response
+function translate() {
+    const data = convertToPng()
+    sendData(data)
+        .then(response => console.log(response))
+        .catch(error => console.error(error))
+}
+
+window.onload = () => {
+    initDrawingArea()
+    document.getElementsByTagName('button')[0].onclick = translate
+}

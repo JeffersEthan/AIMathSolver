@@ -14,8 +14,6 @@ body {
 }
 
 canvas {
-    /*width: 30vw;*/
-    /*aspect-ratio: 1/1;*/
     border: 1px black solid;
 }
 
