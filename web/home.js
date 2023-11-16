@@ -82,6 +82,7 @@ const onRadioChange = () => {
 const onWidthChange = () => {
     let widthSlider = document.getElementById('width')
 
+
     widthSlider.addEventListener('change', () => {
         let canvas = document.getElementsByTagName('canvas')[0];
         const context = canvas.getContext('2d');
