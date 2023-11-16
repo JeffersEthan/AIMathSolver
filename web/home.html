@@ -2,33 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <script src="home.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <title>Math Solver</title>
 </head>
 <body>
-    <div class="header">Enter an expression</div>
-
+    <div class="header flex-display">Put something here?</div>
     <div class="content">
         <div class="sidebar">
-            <button id="clear-button">Clear</button>
-            <form class="radio">
-                <label for="erase">Erase</label>
-                <input type="radio" id="erase" name="erase" value="erase">
-
-                <label for="line">Line Tool</label>
-                <input type="radio" id="line" name="line" value="line">
-            </form>
-            <label for="width">Width:</label>
-            <input type="range" id="width" name="width" min="0" max="10" value="1">
+            <div id="clear-button" class="icon icon-bigger">
+                <i class="material-icons">close</i> <!-- clear canvas -->
+            </div>
+            <div id="line" class="icon icon-smaller icon-selected">
+                <i class="material-icons">border_color</i> <!-- draw option -->
+            </div>
+            <div id="erase" class="icon icon-unselected">
+                <i class="material-icons">auto_fix_normal</i> <!-- eraser option-->
+            </div>
+            <div id="width" class="icon">
+                <i class="material-icons">line_weight</i> <!-- line width -->
+            </div>
         </div>
-
-        <div class="canvas-content">
-            <canvas width="400" height="400"></canvas>
-        </div>
+        <canvas width="1400" height="600"></canvas> <!-- todo dimensions are currently hard coded -->
     </div>
     <div class="footer">
         <button id="submit-button">Submit</button>
+    </div>
+    <div id="width-selector" class="no-display">
+        <label for="width-adjustment">Line Width</label>
+        <input type="range" id="width-adjustment" name="width" min="0.1" max="8" value="1">
     </div>
 </body>
 </html>

@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: "Roboto Mono", monospace;
+}
+
+.header {
+    width: 100vw;
+    height: 10vh;
+}
+
+.content {
+    border-top: 2px #eee solid;
+    border-bottom: 1px #eee solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 2vw;
+
+    height: 73vh;
+    width: 100vw;
+}
+
+.sidebar {
+    margin: 2vw 0 2vw 2vw;
+    padding: 1vw 0;
+    height: 44vh;
+    width: 4.7vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    border-radius: 10px;
+    background-color: #ddd;
+}
+
+.icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 7vh;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+
+    border-radius: 4px;
+}
+
+.icon i {
+    user-select: none;
+    font-size: 4.8vh;
+    color: #515151;
+}
+
+.icon-bigger i {
+    font-size: 5.2vh;
+}
+
+.icon-smaller i {
+    font-size: 4.5vh;
+}
+
+.icon:hover {
+    background-color: #bcbcbc;
+}
+
+.icon-selected {
+    background-color: #adadad;
+}
+
+.icon-unselected {
+    background-color: transparent;
+}
+
+.footer {
+    width: 100vw;
+    height: 12vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.footer button {
+    width: 5vw;
+    height: 3vh;
+    margin: auto;
+}
+
+.no-display {
+    display: none;
+}
+
+.flex-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#width-selector {
+    width: 14vw;
+    height: 8vh;
+    background-color: #ddd;
+    position: absolute;
+    border-radius: 8px;
+}
+
+#width-selector label {
+    font-size: 1.9vh;
+}

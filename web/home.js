@@ -1,11 +1,11 @@
-
 let colorLine = '#000'
+let erase = false;
+let widthPopupShowing = false;
 
 function initDrawingArea() {
     const canvas = document.getElementsByTagName('canvas')[0];
     const context = canvas.getContext('2d');
     context.fillStyle = colorLine;
-
 
     let source = [];
     let isDragging = false;
@@ -31,20 +31,6 @@ function getCurrentCoordinates(event) {
     return [event.clientX - canvasLocation.left, event.clientY - canvasLocation.top];
 }
 
-function draw(source, target, canvas) {
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.moveTo(source[0], source[1]);
-    ctx.lineTo(target[0], target[1]);
-    ctx.stroke();
-}
-
-const sideBarActivity = () => {
-    onClearButton();
-    onWidthChange();
-    onRadioChange();
-}
-
 const onClearButton = () => {
     let clearButton = document.getElementById('clear-button');
     clearButton.addEventListener('click', () => {
@@ -52,42 +38,80 @@ const onClearButton = () => {
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
     });
-
-
 }
 
-const onRadioChange = () => {
-    let erase = document.getElementById('erase');
-    let regLine = document.getElementById('line');
+function draw(source, target, canvas) {
+    const context = canvas.getContext('2d');
 
-    erase.addEventListener('click', () => {
-        erase.checked = true;
-        regLine.checked = false;
-        let canvas = document.getElementsByTagName('canvas')[0];
-        const context = canvas.getContext('2d');
-        context.fillStyle = "FFF";
+    if (erase === true) {
+        context.globalCompositeOperation = 'destination-out';
+        context.arc(target[0], target[1], 5, 0, 2 * Math.PI);
+        context.fill();
+    } else {
+        context.globalCompositeOperation = 'source-over';
+        context.beginPath();
+        context.moveTo(source[0], source[1]);
+        context.lineTo(target[0], target[1]);
+        context.stroke();
+    }
+}
 
+const onToolChange = () => {
+    const eraseOption = document.getElementById('erase');
+    const lineOption = document.getElementById('line');
+
+    eraseOption.addEventListener('click', () => {
+        erase = true;
+        lineOption.classList.remove('icon-selected');
+        lineOption.classList.add('icon-unselected');
+        eraseOption.classList.remove('icon-unselected');
+        eraseOption.classList.add('icon-selected');
     });
-
-    regLine.addEventListener('click', () => {
-        erase.checked = false;
-        regLine.checked = true;
-        let canvas = document.getElementsByTagName('canvas')[0];
-        const context = canvas.getContext('2d');
-        context.fillStyle = '#000';
+    lineOption.addEventListener('click', () => {
+        erase = false
+        eraseOption.classList.remove('icon-selected');
+        eraseOption.classList.add('icon-unselected');
+        lineOption.classList.remove('icon-unselected');
+        lineOption.classList.add('icon-selected');
     });
-
 }
 
 const onWidthChange = () => {
-    let widthSlider = document.getElementById('width')
+    const widthOption = document.getElementById('width');
+    widthOption.onclick = toggleSliderPopup;
 
-
-    widthSlider.addEventListener('change', () => {
+    const widthAdjuster = document.getElementById('width-adjustment')
+    widthAdjuster.addEventListener('change', () => {
         let canvas = document.getElementsByTagName('canvas')[0];
         const context = canvas.getContext('2d');
-        context.lineWidth = widthSlider.value;
+        context.lineWidth = widthAdjuster.value;
     });
+}
+
+function toggleSliderPopup() {
+    const widthOption = document.getElementById('width')
+    const popup = document.getElementById('width-selector')
+
+    if (widthPopupShowing === false) {
+        widthPopupShowing = true
+        const location = widthOption.getBoundingClientRect()
+        popup.style.top = location.top + 'px';
+        popup.style.left = location.right + 20 + 'px';
+
+        popup.classList.remove('no-display')
+        popup.classList.add('flex-display')
+    } else {
+        widthPopupShowing = false
+        popup.classList.remove('flex-display');
+        popup.classList.add('no-display')
+    }
+
+}
+
+const sideBarActivity = () => {
+    onClearButton();
+    onWidthChange();
+    onToolChange();
 }
 
 function convertToPng() {
