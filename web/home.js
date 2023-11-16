@@ -100,14 +100,14 @@ function displayTranslation(data) {
 }
 
 function sendData(data) {
-    return fetch(`http://127.0.0.1:5000/`, {
+    return fetch(`http://127.0.0.1:5000/image/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: {
+        body: JSON.stringify({
             'image': data
-        }
+        })
     });
 }
 
@@ -115,12 +115,12 @@ function sendData(data) {
 function translate() {
     const data = convertToPng()
     sendData(data)
-        .then(response => console.log(response))
-        .catch(error => console.error(error))
+        .then(response => console.log('Responded: ', response))
+        .catch(error => console.error('Error: ', error))
 }
 
 window.onload = () => {
     initDrawingArea()
     sideBarActivity()
-    document.getElementsByTagName('button')[0].onclick = translate
+    document.getElementById('submit-button').onclick = () => translate()
 }
