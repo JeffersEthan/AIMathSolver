@@ -11,6 +11,10 @@ function initDrawingArea() {
     let isDragging = false;
 
     canvas.onmousedown = (e) => {
+        closeLineWidthPopup()
+        if (erase === false) {
+            selectOption('line')
+        }
         source = getCurrentCoordinates(e)
         isDragging = true;
     };
@@ -26,6 +30,23 @@ function initDrawingArea() {
     };
 }
 
+function selectOption(elementId) {
+    const optionIds = ['erase', 'line', 'width', 'clear-button']
+
+    // remove the selected style class from sidebar options before adding it to the given element 'elementId'
+    for (const id of optionIds) {
+        const element = document.getElementById(id)
+        element.classList.remove('icon-unselected')
+        element.classList.remove('icon-selected')
+
+        if (id === elementId) {
+            element.classList.add('icon-selected')
+        } else {
+            element.classList.add('icon-unselected')
+        }
+    }
+}
+
 function getCurrentCoordinates(event) {
     const canvasLocation = document.getElementsByTagName('canvas')[0].getBoundingClientRect();
     return [event.clientX - canvasLocation.left, event.clientY - canvasLocation.top];
@@ -37,7 +58,15 @@ const onClearButton = () => {
         let canvas = document.getElementsByTagName('canvas')[0];
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
+
+        selectPen()
     });
+}
+
+function selectPen() {
+    closeLineWidthPopup()
+    erase = false
+    selectOption('line')
 }
 
 function draw(source, target, canvas) {
@@ -57,22 +86,13 @@ function draw(source, target, canvas) {
 }
 
 const onToolChange = () => {
-    const eraseOption = document.getElementById('erase');
-    const lineOption = document.getElementById('line');
-
-    eraseOption.addEventListener('click', () => {
+    document.getElementById('erase').addEventListener('click', () => {
+        closeLineWidthPopup()
         erase = true;
-        lineOption.classList.remove('icon-selected');
-        lineOption.classList.add('icon-unselected');
-        eraseOption.classList.remove('icon-unselected');
-        eraseOption.classList.add('icon-selected');
+        selectOption('erase')
     });
-    lineOption.addEventListener('click', () => {
-        erase = false
-        eraseOption.classList.remove('icon-selected');
-        eraseOption.classList.add('icon-unselected');
-        lineOption.classList.remove('icon-unselected');
-        lineOption.classList.add('icon-selected');
+    document.getElementById('line').addEventListener('click', () => {
+        selectPen()
     });
 }
 
@@ -89,23 +109,31 @@ const onWidthChange = () => {
 }
 
 function toggleSliderPopup() {
-    const widthOption = document.getElementById('width')
     const popup = document.getElementById('width-selector')
 
     if (widthPopupShowing === false) {
         widthPopupShowing = true
-        const location = widthOption.getBoundingClientRect()
+        const location = document.getElementById('width').getBoundingClientRect()
         popup.style.top = location.top + 'px';
         popup.style.left = location.right + 20 + 'px';
 
         popup.classList.remove('no-display')
         popup.classList.add('flex-display')
+
+        erase = false
+        selectOption('width')
     } else {
+        closeLineWidthPopup()
+    }
+}
+
+function closeLineWidthPopup() {
+    if (widthPopupShowing === true) {
         widthPopupShowing = false
+        const popup = document.getElementById('width-selector')
         popup.classList.remove('flex-display');
         popup.classList.add('no-display')
     }
-
 }
 
 const sideBarActivity = () => {

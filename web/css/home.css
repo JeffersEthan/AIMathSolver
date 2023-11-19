@@ -25,17 +25,18 @@ body {
 
 .sidebar {
     margin: 2vw 0 2vw 2vw;
-    padding: 1vw 0;
-    height: 44vh;
+    height: 40vh;
     width: 4.7vw;
 
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 
     border-radius: 10px;
     background-color: #ddd;
+
+    box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.3);
 }
 
 .icon {
@@ -67,10 +68,12 @@ body {
 
 .icon:hover {
     background-color: #bcbcbc;
+    box-shadow: 1px 1px 5px rgba(100, 100, 100, 0.3);
 }
 
 .icon-selected {
     background-color: #adadad;
+    box-shadow: 1px 1px 5px rgba(100, 100, 100, 0.3);
 }
 
 .icon-unselected {
