@@ -24,6 +24,7 @@ body {
 }
 
 .sidebar {
+    user-select: none;
     margin: 2vw 0 2vw 2vw;
     height: 40vh;
     width: 4.7vw;
@@ -53,7 +54,6 @@ body {
 }
 
 .icon i {
-    user-select: none;
     font-size: 4.8vh;
     color: #515151;
 }
@@ -107,6 +107,7 @@ body {
 }
 
 #width-selector {
+    user-select: none;
     width: 14vw;
     height: 8vh;
     background-color: #ddd;

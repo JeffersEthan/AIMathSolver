@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 from PIL import Image
@@ -32,6 +32,11 @@ def handle_img_post():
     display_img(img)  # todo replace with call to AI
 
     return jsonify({'message': 'Data received successfully'}), 200  # todo send back AI result
+
+
+@app.route('/', methods=['GET'])
+def handle_idx_request():
+    return render_template('home.html')
 
 
 if __name__ == '__main__':

@@ -31,7 +31,6 @@
     justify-content: center;
     align-items: center;
     font-family: "Roboto Mono", monospace;
-
 }
 
 #title {
@@ -61,4 +60,5 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }

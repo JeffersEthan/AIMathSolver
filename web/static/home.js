@@ -171,7 +171,7 @@ function translate() {
         .catch(error => console.error('Error: ', error))
 }
 
-window.onload = () => {
+function loadHomePage() {
     initDrawingArea()
     sideBarActivity()
     document.getElementById('submit-button').onclick = () => translate()
