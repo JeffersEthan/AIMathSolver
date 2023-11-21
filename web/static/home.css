@@ -118,3 +118,17 @@ body {
 #width-selector label {
     font-size: 1.9vh;
 }
+
+#submit-button {
+    width: 20vh;
+    height: 5vh;
+    border-radius: 5vh;
+    border-color: #8EE56A;
+    background: linear-gradient(to bottom, #8EE56A , #5DBB37);
+}
+
+#submit-button:hover {
+    border-color: yellow;
+    background: linear-gradient(to bottom, #5DBB37 , green);
+
+}
