@@ -1,6 +1,6 @@
 function initButtonHandlers() {
     document.getElementById('getStarted').onclick = () => {
-        fetch('http://127.0.0.1:5000/')
+        fetch('http://127.0.0.1:5000/home')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to retrieve the home page; status {${response.status}`)
@@ -11,7 +11,7 @@ function initButtonHandlers() {
                 document.documentElement.innerHTML = html;
                 loadHomePage();
             })
-            .catch(error => console.err(error));
+            .catch(error => console.error(error));
     };
 }
 

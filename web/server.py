@@ -34,9 +34,14 @@ def handle_img_post():
     return jsonify({'message': 'Data received successfully'}), 200  # todo send back AI result
 
 
+@app.route('/home', methods=['GET'])
+def handle_home_request():
+    return render_template('home.html')
+
+
 @app.route('/', methods=['GET'])
 def handle_idx_request():
-    return render_template('home.html')
+    return render_template('title.html')
 
 
 if __name__ == '__main__':
