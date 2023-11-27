@@ -125,6 +125,8 @@ body {
     border-radius: 5vh;
     border-color: #8EE56A;
     background: linear-gradient(to bottom, #8EE56A , #5DBB37);
+    color: white;
+    font-weight: bold;
 }
 
 #submit-button:hover {
