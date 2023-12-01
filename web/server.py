@@ -5,6 +5,8 @@ from PIL import Image
 from io import BytesIO
 import base64
 
+from model.interact import init, interpret
+
 app = Flask(__name__)
 CORS(app)
 
@@ -29,7 +31,8 @@ def handle_img_post():
         return jsonify({'error': 'Invalid image format'}), 400
 
     img = str(img)[img_start:]
-    display_img(img)  # todo replace with call to AI
+    res_img = interpret(img)    # call to model api
+    display_img(res_img)
 
     return jsonify({'message': 'Data received successfully'}), 200  # todo send back AI result
 
@@ -45,4 +48,8 @@ def handle_idx_request():
 
 
 if __name__ == '__main__':
+    # initialize model stuff
+    init("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
+         '/home/jefferse/aimathsolverproject/output/model_final.pth')
+
     app.run(debug=True)
