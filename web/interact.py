@@ -64,7 +64,7 @@ def nearest_limit_var_symbol(limit_coords, approach_sym_coords, components):
     for index, item in enumerate(components):
         if item == -1:
             continue
-        if item[0] == '\\lim' or item[0] == '\\to':
+        if item[0] == '\\lim_' or item[0] == '\\to':
             continue
         symbol_center = get_center(item[1])
 
