@@ -51,8 +51,21 @@ import cv2
 #     return buffer.getvalue()
 
 
-def get_center(box):
-    return (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+def get_center(bounding_rect):
+    return (bounding_rect[0] + bounding_rect[2]) / 2, (bounding_rect[1] + bounding_rect[3]) / 2
+
+
+def get_intersection_ratio(bounding_rect1, bounding_rect2):
+    min_x1, min_y1, max_x1, max_y1 = bounding_rect1
+    min_x2, min_y2, max_x2, max_y2 = bounding_rect2
+
+    dx = min(max_x1, max_x2) - max(min_x1, min_x2)
+    dy = min(max_y1, max_y2) - max(min_y1, min_y2)
+
+    if dx > 0 and dy > 0:
+        return (dx * dy) / ((max_x2 - min_x2) * (max_y2 - min_y2))
+    else:
+        return 0
 
 
 def nearest_limit_var_symbol(limit_coords, approach_sym_coords, components):
@@ -166,8 +179,26 @@ def parse_fraction(frac_bar_idx, frac_bar_coords, components):
         else:
             denominator_components.append(component)
 
+        components[index] = -1
+
     components[frac_bar_idx] = -1
     return numerator_components, denominator_components
+
+
+def parse_sqrt(sqrt_idx, sqrt_coords, components):
+    inner_components = []
+
+    for index, component in enumerate(components):
+        if component == -1 or index == sqrt_idx:
+            continue
+
+        # if more than 80% of this components area is within the bounding rectangle of the sqrt symbol
+        if get_intersection_ratio(sqrt_coords, component[1]) >= 0.8:
+            components[index] = -1
+            inner_components.append(component)
+
+    components[sqrt_idx] = -1
+    return inner_components
 
 
 def rec_parse_res(components, end_index, index=0, exp_builder='', close_parenthesis=False):
@@ -183,6 +214,8 @@ def rec_parse_res(components, end_index, index=0, exp_builder='', close_parenthe
         return rec_parse_res(components, end_index, index + 1, exp_builder + parse_limit(index, component[1], components))
 
     elif symbol in ['\\sec', '\\tan', '\\cos', '\\csc', '\\cot', '\\sin']:
+        # todo close_parenthesis only works if the following symbol is a variable.
+        #  Change this approach to something like how sqrt is handled
         return rec_parse_res(components, end_index, index + 1, exp_builder + symbol + '(', close_parenthesis=True)
 
     elif symbol == '\\frac':
@@ -193,8 +226,11 @@ def rec_parse_res(components, end_index, index=0, exp_builder='', close_parenthe
     # elif symbol in ['\\log', '\\ln']:
         # todo this will just be appended as a normal symbol for now
 
-    # elif symbol == '\\sqrt':
-        # todo this will just be appended as a normal symbol for now
+    elif symbol == '\\sqrt':
+        inner_components = parse_sqrt(index, component[1], components)
+        sqrt_latex = '\\sqrt{' + rec_parse_res(inner_components, len(inner_components)) + '}'
+
+        return rec_parse_res(components, end_index, index + 1, exp_builder + sqrt_latex)
 
     else:
         components[index] = -1
