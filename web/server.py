@@ -5,7 +5,7 @@ from PIL import Image
 from io import BytesIO
 import base64
 
-from model.interact import init, interpret
+from interact import init, interpret
 
 app = Flask(__name__)
 CORS(app)
@@ -50,6 +50,6 @@ def handle_idx_request():
 if __name__ == '__main__':
     # initialize model stuff
     init("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
-         '/home/jefferse/aimathsolverproject/output/model_final.pth')
+         'web/finalweights.pth')
 
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
