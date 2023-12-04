@@ -11,7 +11,11 @@ from detectron2.model_zoo import model_zoo
 from detectron2.utils.visualizer import Visualizer
 
 cfg = get_cfg()
-
+keys = ['\\lim_', 'a', '\\to', '\\frac', '\\pi', '4', 'd', '\\left(', 
+        '\\sin', '+', '-', '6', '\\sec', '\\right)', 'w', '/', '5', '\\tan', '2', '3', 'e', 'b', '7', 
+        '\\cos', '\\theta', '8', '=', 'x', '9', '1', 'y', 'h', 'k', 'g', '\\csc', '\\infty', '0', '\\sqrt', 'r', 
+        '\\ln', 'n', 'u', '\\cot', '\\left|', '\\right|', 'p', 't', 'z', '\\log', 'v', 's', 'c', '\\cdot', '.']
+MetadataCatalog.get("math_metadata").thing_classes = list(keys)
 
 def init(model_yaml, model_weights):
     cfg.merge_from_file(model_zoo.get_config_file(model_yaml))
@@ -29,7 +33,7 @@ def interpret(png_image):
     outputs = predictor(cv2_image)
     print(outputs)
     v = Visualizer(cv2_image[:, :, ::-1],
-                   metadata=MetadataCatalog.get("calc_testing"),
+                   metadata=MetadataCatalog.get("math_metadata"),
                    scale=0.5,
                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
     )
