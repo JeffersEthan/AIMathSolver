@@ -186,11 +186,14 @@ function submitImage() {
 }
 
 function loadHomePage() {
-
         initDrawingArea()
         sideBarActivity()
         submitImage()
 
+}
 
-
+window.onload = () => {
+    initDrawingArea()
+    sideBarActivity()
+    submitImage()
 }
