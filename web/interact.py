@@ -5,6 +5,7 @@ import io
 import numpy as np
 import cv2
 import base64
+from io import BytesIO
 import detectron2
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
@@ -32,9 +33,11 @@ def init(model_yaml, model_weights):
 
 def interpret(png_image):
     # convert png image to cv2
-    pil_img = Image.open(io.BytesIO(base64.b64decode(png_image)))
-    png_np_array = np.array(pil_img)
-    cv2_image = cv2.cvtColor(png_np_array, cv2.COLOR_RGB2BGR)
+    # img_data = base64.b64decode(png_image)
+    # np_image = np.frombuffer(img_data, np.uint8)
+    # cv2_image = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+    cv2_image = cv2.imread("input_image.png")
+
     #send through model
     predictor = DefaultPredictor(cfg)
     outputs = predictor(cv2_image)
@@ -47,10 +50,12 @@ def interpret(png_image):
     )
     # draw output from model as plot
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+    plt.figure(figsize=(140, 60), dpi=96)
     plt.imshow(out.get_image()[:, :, ::-1], cmap = 'gray', interpolation = 'bicubic')
     plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
     # save plot as image
     buffer = io.BytesIO()
+    plt.savefig("output_image.png")
     plt.savefig(buffer, format='png')
     buffer.seek(0)
 

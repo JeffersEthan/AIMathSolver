@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
-
+import cv2
+import numpy as np
 from PIL import Image
 from io import BytesIO
 import base64
@@ -10,12 +11,24 @@ from interact import init, interpret
 app = Flask(__name__)
 CORS(app)
 
+def create_img(png):
+    '''
+    The image is transparent when it is received, need to add a white background
+    '''
+    image_data = base64.b64decode(png)
+    image_stream = BytesIO(image_data)
+    foreground = Image.open(image_stream)
+    background = Image.new('RGB', foreground.size, 'white')
+    background.paste(foreground, (0, 0), foreground.convert("RGBA"))
+    background.save("input_image.png")
 
 def display_img(img):
     image_data = base64.b64decode(img)
     image_stream = BytesIO(image_data)
-    image = Image.open(image_stream)
-    image.show()
+    foreground = Image.open(image_stream)
+    background = Image.new('RGB', foreground.size, 'white')
+    background.paste(foreground, (0, 0), foreground.convert("RGBA"))
+
 
 
 @app.route('/image/', methods=['POST'])
@@ -31,10 +44,11 @@ def handle_img_post():
         return jsonify({'error': 'Invalid image format'}), 400
 
     img = str(img)[img_start:]
-    res_img = interpret(img)    # call to model api
-    display_img(res_img)
+    create_img(img)
+    res_img = interpret("")    # call to model api
+    #display_img(img)
 
-    return jsonify({'message': 'Data received successfully'}), 200  # todo send back AI result
+    return send_file("output_image.png", mimetype='image/png')
 
 
 @app.route('/home', methods=['GET'])
