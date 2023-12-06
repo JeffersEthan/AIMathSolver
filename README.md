@@ -8,6 +8,7 @@ To deploy the project for development follow the steps below.
 
 1. Make sure docker daemon is installed and running on your local machine. https://docs.docker.com/get-docker/
 2. Build the dockerfile in the root folder of the repo ```docker build -t <image_name> .``` This will take a while....
+   3. You can name the image whatever you want....
 3. Run the docker container, there are some important steps here. ```docker run -it -p 5000:5000 -v ./web:/home/detectronuser/ <image_name>```
 
    - ```docker run -it``` this will run the container in interactive mode, giving you a terminal to use when working
