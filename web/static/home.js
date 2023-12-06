@@ -171,8 +171,26 @@ function translate() {
         .catch(error => console.error('Error: ', error))
 }
 
+function submitImage() {
+    const submitButton = document.getElementById('submit-button')
+    const dialog = document.querySelector("dialog");
+    const closeButton = document.querySelector("dialog button");
+    submitButton.onclick = () => {
+        translate()
+        dialog.showModal();
+        closeButton.addEventListener("click", () => {
+            dialog.close();
+        });
+    }
+
+}
+
 function loadHomePage() {
-    initDrawingArea()
-    sideBarActivity()
-    document.getElementById('submit-button').onclick = () => translate()
+
+        initDrawingArea()
+        sideBarActivity()
+        submitImage()
+
+
+
 }

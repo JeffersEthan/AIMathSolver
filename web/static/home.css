@@ -119,6 +119,44 @@ body {
     font-size: 1.9vh;
 }
 
+dialog{
+    background-color: white;
+    border-radius: 2vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+dialog:not([open]) {
+  pointer-events: none;
+  opacity: 0;
+}
+
+dialog h2{
+    border-bottom: 2px solid black;
+}
+
+dialog button {
+    width: 20vh;
+    height: 5vh;
+    border-radius: 5vh;
+    border-color: orangered;
+    background: linear-gradient(to bottom, orange , red);
+    color: white;
+    font-weight: bold;
+}
+
+::backdrop {
+  background-image: linear-gradient(
+    45deg,
+    dodgerblue,
+    lightgray
+  );
+  opacity: 0.75;
+}
+
 #submit-button {
     width: 20vh;
     height: 5vh;

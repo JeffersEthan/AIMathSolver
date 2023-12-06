@@ -5,34 +5,43 @@
 
     <link rel="stylesheet" type="text/css" href="../static/home.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <title>Math Solver</title>
+    <script src="../static/home.js" type="application/javascript"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
 </head>
 <body>
-    <div id="loading-circle"></div>
-    <div class="header flex-display">Put something here?</div>
-    <div class="content">
-        <div class="sidebar">
-            <div id="erase" class="icon icon-unselected">
-                <i class="material-icons">auto_fix_normal</i> <!-- eraser option-->
-            </div>
-            <div id="line" class="icon icon-smaller icon-selected">
-                <i class="material-icons">edit</i> <!-- draw option -->
-            </div>
-            <div id="width" class="icon line-weight icon-unselected">
-                <i class="material-icons">line_weight</i> <!-- line width -->
-            </div>
-            <div id="clear-button" class="icon icon-bigger">
-                <i class="material-icons">close</i> <!-- clear canvas -->
-            </div>
+<dialog>
+    <h2>Model Prediction</h2>
+    <p><span class="math display">\[y = \frac{a}{b} + c^2 + d\]</span></p>
+    <button id="close-button">Close</button>
+</dialog>
+<div id="loading-circle"></div>
+<div class="header flex-display">Put something here?</div>
+<div class="content">
+    <div class="sidebar">
+        <div id="erase" class="icon icon-unselected">
+            <i class="material-icons">auto_fix_normal</i> <!-- eraser option-->
         </div>
-        <canvas width="1400" height="600"></canvas> <!-- todo dimensions are currently hard coded -->
+        <div id="line" class="icon icon-smaller icon-selected">
+            <i class="material-icons">edit</i> <!-- draw option -->
+        </div>
+        <div id="width" class="icon line-weight icon-unselected">
+            <i class="material-icons">line_weight</i> <!-- line width -->
+        </div>
+        <div id="clear-button" class="icon icon-bigger">
+            <i class="material-icons">close</i> <!-- clear canvas -->
+        </div>
     </div>
-    <div class="footer">
-        <button id="submit-button">Submit</button>
-    </div>
-    <div id="width-selector" class="no-display">
-        <label for="width-adjustment">Line Width</label>
-        <input type="range" id="width-adjustment" name="width" min="0.1" max="8" value="1">
-    </div>
+    <canvas width="1400" height="600"></canvas> <!-- todo dimensions are currently hard coded -->
+</div>
+<div class="footer">
+    <button id="submit-button">Submit</button>
+</div>
+<div id="width-selector" class="no-display">
+    <label for="width-adjustment">Line Width</label>
+    <input type="range" id="width-adjustment" name="width" min="0.1" max="8" value="1">
+</div>
 </body>
 </html>
