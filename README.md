@@ -18,4 +18,4 @@ To deploy the project for development follow the steps below.
 4. Start conda inside of the container ```. /opt/conda/etc/profile.d/conda.sh``` without this the container cannot be activated
 5. Activate the conda enviornment ```conda activate local_detectron``` this has all of the dependencies automatically installed, and allows us to easily change between version of python.
 6. Start the server ```python server.py```
-7. If all does well, conntect to the sever on your local browswer. 
+7. If all goes well, connect to the local server on your browser. 
