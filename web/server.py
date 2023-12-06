@@ -46,6 +46,7 @@ def handle_img_post():
     img = str(img)[img_start:]
     create_img(img)
     res_img = interpret("")    # call to model api
+    print(res_img)
     #display_img(img)
 
     return send_file("output_image.png", mimetype='image/png')

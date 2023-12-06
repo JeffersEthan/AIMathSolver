@@ -14,21 +14,32 @@ from detectron2.model_zoo import model_zoo
 from detectron2.utils.visualizer import Visualizer
 from detectron2.utils.visualizer import ColorMode
 
+def invert(original_dict):
+    return {value: key for key, value in original_dict.items()}
+
 cfg = get_cfg()
-keys = ['\\lim_', 'a', '\\to', '\\frac', '\\pi', '4', 'd', '\\left(',
+
+symbols =  {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd': 6, '\\left(': 7, '\\sin': 8, '+': 9,
+           '-': 10, '6': 11, '\\sec': 12, '\\right)': 13, 'w': 14, '/': 15, '5': 16, '\\tan': 17, '2': 18, '3': 19,
+           'e': 20, 'b': 21, '7': 22, '\\cos': 23, '\\theta': 24, '8': 25, '=': 26, 'x': 27, '9': 28, '1': 29, 'y': 30,
+           'h': 31, 'k': 32, 'g': 33, '\\csc': 34, '\\infty': 35, '0': 36, '\\sqrt': 37, 'r': 38, '\\ln': 39, 'n': 40,
+           'u': 41, '\\cot': 42, '\\left|': 43, '\\right|': 44, 'p': 45, 't': 46, 'z': 47, '\\log': 48, 'v': 49,
+           's': 50, 'c': 51, '\\cdot': 52, '.': 53}
+
+latex_keys = ['\\lim_', 'a', '\\to', '\\frac', '\\pi', '4', 'd', '\\left(',
         '\\sin', '+', '-', '6', '\\sec', '\\right)', 'w', '/', '5', '\\tan', '2', '3', 'e', 'b', '7',
         '\\cos', '\\theta', '8', '=', 'x', '9', '1', 'y', 'h', 'k', 'g', '\\csc', '\\infty', '0', '\\sqrt', 'r',
         '\\ln', 'n', 'u', '\\cot', '\\left|', '\\right|', 'p', 't', 'z', '\\log', 'v', 's', 'c', '\\cdot', '.']
 
-
+inverted_symbols = {value: key for key, value in symbols.items()}
 
 def init(model_yaml, model_weights):
     cfg.MODEL.DEVICE = "cpu"
     cfg.merge_from_file("/home/detectronuser/detectron2/configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
     cfg.MODEL.WEIGHTS = "/home/detectronuser/model_weights.pth"
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 54
-    MetadataCatalog.get("math_metadata").thing_classes = list(keys)
+    MetadataCatalog.get("math_metadata").thing_classes = list(latex_keys)
 
 
 def interpret(png_image):
@@ -41,8 +52,6 @@ def interpret(png_image):
     #send through model
     predictor = DefaultPredictor(cfg)
     outputs = predictor(cv2_image)
-    print("THESE ARE THE OUTPUTS ")
-    print(outputs)
     v = Visualizer(cv2_image[:, :, ::-1],
                    metadata=MetadataCatalog.get("math_metadata"),
                    scale=0.5,
@@ -57,9 +66,8 @@ def interpret(png_image):
     buffer = io.BytesIO()
     plt.savefig("output_image.png")
     plt.savefig(buffer, format='png')
-    buffer.seek(0)
-
-    return buffer.getvalue()
+    return parse_res(outputs["instances"].pred_boxes,
+                     outputs["instances"].pred_classes.tolist(), inverted_symbols)
 
 
 def get_center(bounding_rect):
@@ -265,9 +273,6 @@ def map_labels(expression_boxes, predicted_labels, latex_keys):
     return [[latex_keys[exp[0]], exp[1]] for exp in expressions]
 
 
-def invert(original_dict):
-    return {value: key for key, value in original_dict.items()}
-
 
 # ------- for testing -------
 exp_boxes = [
@@ -285,12 +290,12 @@ exp_boxes = [
     [275.9488, 169.0730, 745.0270, 180.1284],
 ]
 
-labels = [0, 2, 10, 25, 11, 10, 27, 27, 27, 16, 37, 3]
-symbols = {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd': 6, '\\left(': 7, '\\sin': 8, '+': 9,
-           '-': 10, '6': 11, '\\sec': 12, '\\right)': 13, 'w': 14, '/': 15, '5': 16, '\\tan': 17, '2': 18, '3': 19,
-           'e': 20, 'b': 21, '7': 22, '\\cos': 23, '\\theta': 24, '8': 25, '=': 26, 'x': 27, '9': 28, '1': 29, 'y': 30,
-           'h': 31, 'k': 32, 'g': 33, '\\csc': 34, '\\infty': 35, '0': 36, '\\sqrt': 37, 'r': 38, '\\ln': 39, 'n': 40,
-           'u': 41, '\\cot': 42, '\\left|': 43, '\\right|': 44, 'p': 45, 't': 46, 'z': 47, '\\log': 48, 'v': 49,
-           's': 50, 'c': 51, '\\cdot': 52, '.': 53}
-
-print(parse_res(exp_boxes, labels, invert(symbols)))
+# labels = [0, 2, 10, 25, 11, 10, 27, 27, 27, 16, 37, 3]
+# symbols = {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd': 6, '\\left(': 7, '\\sin': 8, '+': 9,
+#            '-': 10, '6': 11, '\\sec': 12, '\\right)': 13, 'w': 14, '/': 15, '5': 16, '\\tan': 17, '2': 18, '3': 19,
+#            'e': 20, 'b': 21, '7': 22, '\\cos': 23, '\\theta': 24, '8': 25, '=': 26, 'x': 27, '9': 28, '1': 29, 'y': 30,
+#            'h': 31, 'k': 32, 'g': 33, '\\csc': 34, '\\infty': 35, '0': 36, '\\sqrt': 37, 'r': 38, '\\ln': 39, 'n': 40,
+#            'u': 41, '\\cot': 42, '\\left|': 43, '\\right|': 44, 'p': 45, 't': 46, 'z': 47, '\\log': 48, 'v': 49,
+#            's': 50, 'c': 51, '\\cdot': 52, '.': 53}
+#
+# print(parse_res(exp_boxes, labels, invert(symbols)))
