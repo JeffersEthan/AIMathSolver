@@ -187,7 +187,6 @@ function pngToCanvas(img) {
     let canvas1 = document.createElement("canvas");
     canvas1.width = 500
     canvas1.height = 500
-
     let ctx1 = canvas1.getContext("2d");
 
     ctx1.drawImage(img, 0, 0, canvas1.width, canvas1.height);
@@ -207,10 +206,6 @@ function pngToCanvas(img) {
     dialImg.width = 650
     dialImg.height = 650
     dialImg.src = newCanvas.toDataURL('image/png')
-}
-
-function displayTranslation(data) {
-    // this will be for displaying the response from the server containing the translated expression (the data parameter)
 }
 
 function sendData(data) {
@@ -237,7 +232,6 @@ function sendDataGetLatec(data) {
     });
 }
 
-// this will be the base method for sending image to the server and displaying the response
 function translate() {
     const data = convertToPng()
 
@@ -251,7 +245,7 @@ function translate() {
         .then(json => {
             let image = json.image;
             let latex = json.latex;
-    //const img = document.getElementById('result-image');
+
             const newImg = new Image();
             newImg.src = `data:image/png;base64,${image}`;
             newImg.width = 700;
