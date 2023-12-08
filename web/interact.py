@@ -14,12 +14,14 @@ from detectron2.model_zoo import model_zoo
 from detectron2.utils.visualizer import Visualizer
 from detectron2.utils.visualizer import ColorMode
 
+
 def invert(original_dict):
     return {value: key for key, value in original_dict.items()}
 
+
 cfg = get_cfg()
 
-symbols =  {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd': 6, '\\left(': 7, '\\sin': 8, '+': 9,
+symbols = {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd': 6, '\\left(': 7, '\\sin': 8, '+': 9,
            '-': 10, '6': 11, '\\sec': 12, '\\right)': 13, 'w': 14, '/': 15, '5': 16, '\\tan': 17, '2': 18, '3': 19,
            'e': 20, 'b': 21, '7': 22, '\\cos': 23, '\\theta': 24, '8': 25, '=': 26, 'x': 27, '9': 28, '1': 29, 'y': 30,
            'h': 31, 'k': 32, 'g': 33, '\\csc': 34, '\\infty': 35, '0': 36, '\\sqrt': 37, 'r': 38, '\\ln': 39, 'n': 40,
@@ -27,11 +29,12 @@ symbols =  {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd':
            's': 50, 'c': 51, '\\cdot': 52, '.': 53}
 
 latex_keys = ['\\lim_', 'a', '\\to', '\\frac', '\\pi', '4', 'd', '\\left(',
-        '\\sin', '+', '-', '6', '\\sec', '\\right)', 'w', '/', '5', '\\tan', '2', '3', 'e', 'b', '7',
-        '\\cos', '\\theta', '8', '=', 'x', '9', '1', 'y', 'h', 'k', 'g', '\\csc', '\\infty', '0', '\\sqrt', 'r',
-        '\\ln', 'n', 'u', '\\cot', '\\left|', '\\right|', 'p', 't', 'z', '\\log', 'v', 's', 'c', '\\cdot', '.']
+              '\\sin', '+', '-', '6', '\\sec', '\\right)', 'w', '/', '5', '\\tan', '2', '3', 'e', 'b', '7',
+              '\\cos', '\\theta', '8', '=', 'x', '9', '1', 'y', 'h', 'k', 'g', '\\csc', '\\infty', '0', '\\sqrt', 'r',
+              '\\ln', 'n', 'u', '\\cot', '\\left|', '\\right|', 'p', 't', 'z', '\\log', 'v', 's', 'c', '\\cdot', '.']
 
 inverted_symbols = {value: key for key, value in symbols.items()}
+
 
 def init(model_yaml, model_weights):
     cfg.MODEL.DEVICE = "cpu"
@@ -43,24 +46,19 @@ def init(model_yaml, model_weights):
 
 
 def interpret(png_image):
-    # convert png image to cv2
-    # img_data = base64.b64decode(png_image)
-    # np_image = np.frombuffer(img_data, np.uint8)
-    # cv2_image = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
     cv2_image = cv2.imread("input_image.png")
 
-    #send through model
+    # send through model
     predictor = DefaultPredictor(cfg)
     outputs = predictor(cv2_image)
     v = Visualizer(cv2_image[:, :, ::-1],
                    metadata=MetadataCatalog.get("math_metadata"),
                    scale=0.5,
-                   instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
-    )
+                   instance_mode=ColorMode.IMAGE_BW)
     # draw output from model as plot
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
     plt.figure(figsize=(14, 6))
-    plt.imshow(out.get_image()[:, :, ::-1], cmap = 'gray', interpolation = 'bicubic')
+    plt.imshow(out.get_image()[:, :, ::-1], cmap='gray', interpolation='bicubic')
     plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
     # save plot as image
     buffer = io.BytesIO()
@@ -68,7 +66,7 @@ def interpret(png_image):
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     return (buffer, parse_res(outputs["instances"].pred_boxes,
-                     outputs["instances"].pred_classes.tolist(), inverted_symbols))
+                              outputs["instances"].pred_classes.tolist(), inverted_symbols))
 
 
 def get_center(bounding_rect):
@@ -231,7 +229,8 @@ def rec_parse_res(components, end_index, index=0, exp_builder='', close_parenthe
 
     symbol = component[0]
     if symbol == '\\lim_':
-        return rec_parse_res(components, end_index, index + 1, exp_builder + parse_limit(index, component[1], components))
+        return rec_parse_res(components, end_index, index + 1,
+                             exp_builder + parse_limit(index, component[1], components))
 
     elif symbol in ['\\sec', '\\tan', '\\cos', '\\csc', '\\cot', '\\sin']:
         # todo close_parenthesis only works if the following symbol is a variable.
@@ -244,7 +243,7 @@ def rec_parse_res(components, end_index, index=0, exp_builder='', close_parenthe
                 ') / (' + rec_parse_res(denominator_components, len(denominator_components)) + ')')
 
     # elif symbol in ['\\log', '\\ln']:
-        # todo this will just be appended as a normal symbol for now
+    # todo this will just be appended as a normal symbol for now
 
     elif symbol == '\\sqrt':
         inner_components = parse_sqrt(index, component[1], components)
@@ -263,7 +262,6 @@ def parse_res(expression_boxes, predicted_labels, latex_keys):
     components = map_labels(expression_boxes, predicted_labels, latex_keys)
     expression = rec_parse_res(components, len(components))
 
-    # todo send expression to some api
     return expression
 
 
@@ -272,31 +270,3 @@ def map_labels(expression_boxes, predicted_labels, latex_keys):
     expressions.sort(key=lambda exp: exp[1][0])
 
     return [[latex_keys[exp[0]], exp[1]] for exp in expressions]
-
-
-
-# ------- for testing -------
-exp_boxes = [
-    [10.8068, 73.4069, 220.5727, 187.0229],
-    [54.5637, 222.9166, 113.1743, 250.4551],
-    [482.0543, 100.2875, 548.4798, 117.3341],
-    [568.0111, 26.9270, 688.7905, 129.0062],
-    [129.4416, 188.8115, 175.1222, 255.6254],
-    [679.0231, 305.3786, 757.3752, 322.7954],
-    [548.4131, 240.2029, 663.1025, 352.3607],
-    [5.2613, 194.7897, 53.5480, 250.6182],
-    [363.9603, 42.4444, 468.4120, 146.9426],
-    [683.0955, 32.6520, 767.7201, 179.8736],
-    [325.3777, 174.5259, 647.8566, 474.2382],
-    [275.9488, 169.0730, 745.0270, 180.1284],
-]
-
-# labels = [0, 2, 10, 25, 11, 10, 27, 27, 27, 16, 37, 3]
-# symbols = {'\\lim_': 0, 'a': 1, '\\to': 2, '\\frac': 3, '\\pi': 4, '4': 5, 'd': 6, '\\left(': 7, '\\sin': 8, '+': 9,
-#            '-': 10, '6': 11, '\\sec': 12, '\\right)': 13, 'w': 14, '/': 15, '5': 16, '\\tan': 17, '2': 18, '3': 19,
-#            'e': 20, 'b': 21, '7': 22, '\\cos': 23, '\\theta': 24, '8': 25, '=': 26, 'x': 27, '9': 28, '1': 29, 'y': 30,
-#            'h': 31, 'k': 32, 'g': 33, '\\csc': 34, '\\infty': 35, '0': 36, '\\sqrt': 37, 'r': 38, '\\ln': 39, 'n': 40,
-#            'u': 41, '\\cot': 42, '\\left|': 43, '\\right|': 44, 'p': 45, 't': 46, 'z': 47, '\\log': 48, 'v': 49,
-#            's': 50, 'c': 51, '\\cdot': 52, '.': 53}
-#
-# print(parse_res(exp_boxes, labels, invert(symbols)))

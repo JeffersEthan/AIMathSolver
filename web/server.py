@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
-import cv2
-import numpy as np
 from PIL import Image
 from io import BytesIO
 import base64
@@ -11,24 +9,17 @@ from interact import init, interpret
 app = Flask(__name__)
 CORS(app)
 
+
 def create_img(png):
-    '''
+    """
     The image is transparent when it is received, need to add a white background
-    '''
+    """
     image_data = base64.b64decode(png)
     image_stream = BytesIO(image_data)
     foreground = Image.open(image_stream)
     background = Image.new('RGB', foreground.size, 'white')
     background.paste(foreground, (0, 0), foreground.convert("RGBA"))
     background.save("input_image.png")
-
-def display_img(img):
-    image_data = base64.b64decode(img)
-    image_stream = BytesIO(image_data)
-    foreground = Image.open(image_stream)
-    background = Image.new('RGB', foreground.size, 'white')
-    background.paste(foreground, (0, 0), foreground.convert("RGBA"))
-
 
 
 @app.route('/image/', methods=['POST'])
@@ -48,7 +39,6 @@ def handle_img_post():
     buffer, res_latex = interpret("")    # call to model api
     encoded_image = base64.b64encode(buffer.read()).decode('utf-8')
     return jsonify({'latex': res_latex, 'image': encoded_image})
-    #return send_file("output_image.png", mimetype='image/png')
 
 
 @app.route('/home', methods=['GET'])
@@ -62,7 +52,6 @@ def handle_idx_request():
 
 
 if __name__ == '__main__':
-    # initialize model stuff
     init("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
          'web/finalweights.pth')
 

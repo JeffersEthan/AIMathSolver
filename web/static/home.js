@@ -169,7 +169,6 @@ function getCanvasBoundingRect(canvas, ctx) {
             }
         }
     }
-
     // If no white pixels were found, set default values
     if (top === null) top = 0;
     if (bottom === null) bottom = canvas.height - 1;
@@ -179,58 +178,8 @@ function getCanvasBoundingRect(canvas, ctx) {
     return { top, bottom, left, right };
 }
 
-// function getCanvasBoundingRect(canvas, ctx) {
-//     let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-//     let counter = 0;
-//     const pixels = Array.from(imgData.data).filter(() => {
-//         if (counter === 3) {
-//             counter = 0;
-//             return true;
-//         }
-//         counter++;
-//         return false;
-//     });
-//     //  Find top and bottom boundaries
-//     let top = null;
-//     let bottom = null;
-//     let left = canvas.width;
-//     let right = 0;
-//
-//     //console.log(pixels)
-//
-//     for (let y = 0; y < pixels.length - canvas.width; y += canvas.width) {
-//         const row = pixels.slice(y, y + canvas.width);
-//         if (row.some(pixel => pixel > 0)) {
-//             //  If we have no top yet, then this is it
-//             if (top === null)
-//                 top = y == 0 ? 0 : y / canvas.width;
-//             //  This is the bottommost row we found so far
-//             bottom = y / canvas.width;
-//
-//             //  Find leftmost and rightmost pixels
-//             let leftmost = null;
-//             let rightmost = null;
-//             for (x = 0; x < row.length; x++) {
-//                 if (!!row[x]) {
-//                     if (leftmost === null)
-//                         leftmost = x;
-//                     rightmost = x;
-//                 }
-//             }
-//
-//             if (leftmost < left) left = leftmost;
-//             if (rightmost > right) right = rightmost;
-//         }
-//     }
-//
-//     console.log(`${left} ; ${top} - ${right} ; ${bottom}`);
-//     return {left: left, top: top, right: right, bottom: bottom}
-// }
-
 function convertToPng() {
     const canvas = document.getElementsByTagName('canvas')[0]
-    //ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    //return croppedCanvas.toDataURL('image/png')
     return canvas.toDataURL('image/png')
 }
 
@@ -243,36 +192,6 @@ function pngToCanvas(img) {
 
     ctx1.drawImage(img, 0, 0, canvas1.width, canvas1.height);
 
-
-    // let centerX = canvas1.width / 2 + 100;
-    // let centerY = canvas1.height / 2;
-    // ctx1.fillStyle = "black";
-    // ctx1.beginPath();
-    // ctx1.arc(centerX, centerY, 100, 0, 2 * Math.PI);
-    // ctx1.fill();
-    // ctx1.closePath();
-
-
-
-    //-------------------------------------------
-    ////let img = new Image();
-    // img.src = "https://pbs.twimg.com/profile_images/1385590079117303810/SZDo82wS_400x400.jpg";
-    //
-    // const canvas = document.createElement("canvas")
-    // canvas.width = 500;
-    // canvas.height = 500;
-    // let ctx = canvas.getContext('2d')
-    // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    // let bounds = getCanvasBoundingRect(canvas, ctx)
-    // console.log(bounds)
-    //-------------------------------------------------
-    // img.src = canvas1.toDataURL();
-    //
-    // const canvas2 = document.createElement("canvas")
-    // canvas2.width = 500;
-    // canvas2.height = 500;
-    // let ctx = canvas2.getContext('2d')
-    // ctx.drawImage(img, 0, 0, canvas2.width, canvas2.height);
     let bounds = getCanvasBoundingRect(canvas1, ctx1)
     console.log(bounds)
 
@@ -322,28 +241,6 @@ function sendDataGetLatec(data) {
 function translate() {
     const data = convertToPng()
 
-
-    //   sendDataGetLatec(data)
-    //       .then(response => {
-    //           if (!response.ok) {
-    //               throw new Error(`HTTP error! Status: ${response.status}`);
-    //           }
-    //           // Assuming the server sends the image as a response
-    //           return response.blob();
-    //       })
-    //       .then(blob => {
-    //   return blob.text();
-    // })
-    // .then(textContent => {
-    //     let paragraph = document.querySelector('dialog p');
-    //     paragraph.innerHTML = textContent
-    //     console.log(textContent)
-    // })
-    // .catch(error => {
-    //   console.error('Error:', error);
-    // });
-
-
     sendData(data)
         .then(response => {
             if (!response.ok) {
@@ -361,16 +258,11 @@ function translate() {
             newImg.height = 700;
 
             newImg.onload = () => {
-                // pngToCanvas(newImg)
                 document.getElementById('result-image').src = newImg.src
             }
             document.getElementById("latex-view").innerHTML = latex
-
-
     })
     .catch(error => console.error('Error: ', error))
-
-
 }
 
 function submitImage() {
@@ -378,13 +270,15 @@ function submitImage() {
     const dialog = document.querySelector("dialog");
     const closeButton = document.querySelector("dialog button");
     submitButton.onclick = () => {
+        document.getElementById('result-image').src = ''
+        document.getElementById('latex-view').innerHTML = ''
+
         translate()
         dialog.showModal();
         closeButton.addEventListener("click", () => {
             dialog.close();
         });
     }
-
 }
 
 window.onload = () => {
