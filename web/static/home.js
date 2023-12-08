@@ -349,26 +349,21 @@ function translate() {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-
-            return response.blob();
+            return response.json();
         })
-        .then(blob => {
-
-            const url = URL.createObjectURL(blob);
-            console.log(blob)
-
+        .then(json => {
+            let image = json.image;
+            let latex = json.latex;
     //const img = document.getElementById('result-image');
             const newImg = new Image();
-            newImg.src = url;
-
-            //const img = document.getElementById('result-image');
-    //img.src = url;
-    newImg.width = 500
+            newImg.src = `data:image/png;base64,${image}`;
+            newImg.width = 500
             newImg.height = 500
 
             newImg.onload = () => {
-                    pngToCanvas(newImg)
+                pngToCanvas(newImg)
             }
+            document.getElementById("latex-view").innerHTML = latex
 
 
     })

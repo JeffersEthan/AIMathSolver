@@ -37,7 +37,7 @@ def init(model_yaml, model_weights):
     cfg.MODEL.DEVICE = "cpu"
     cfg.merge_from_file("/home/detectronuser/detectron2/configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
     cfg.MODEL.WEIGHTS = "/home/detectronuser/model_weights.pth"
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.6
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 54
     MetadataCatalog.get("math_metadata").thing_classes = list(latex_keys)
 
@@ -59,15 +59,16 @@ def interpret(png_image):
     )
     # draw output from model as plot
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    plt.figure(figsize=(140, 60), dpi=96)
+    plt.figure(figsize=(14, 6))
     plt.imshow(out.get_image()[:, :, ::-1], cmap = 'gray', interpolation = 'bicubic')
     plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
     # save plot as image
     buffer = io.BytesIO()
-    plt.savefig("output_image.png")
+
     plt.savefig(buffer, format='png')
-    return parse_res(outputs["instances"].pred_boxes,
-                     outputs["instances"].pred_classes.tolist(), inverted_symbols)
+    buffer.seek(0)
+    return (buffer, parse_res(outputs["instances"].pred_boxes,
+                     outputs["instances"].pred_classes.tolist(), inverted_symbols))
 
 
 def get_center(bounding_rect):
