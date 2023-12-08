@@ -285,12 +285,9 @@ function pngToCanvas(img) {
         bounds.bottom - bounds.top);
 
     const dialImg = document.getElementById('result-image');
-    dialImg.width = 400
-    dialImg.height = 400
+    dialImg.width = 650
+    dialImg.height = 650
     dialImg.src = newCanvas.toDataURL('image/png')
-
-
-
 }
 
 function displayTranslation(data) {
@@ -360,11 +357,12 @@ function translate() {
     //const img = document.getElementById('result-image');
             const newImg = new Image();
             newImg.src = `data:image/png;base64,${image}`;
-            newImg.width = 500
-            newImg.height = 500
+            newImg.width = 700;
+            newImg.height = 700;
 
             newImg.onload = () => {
-                pngToCanvas(newImg)
+                // pngToCanvas(newImg)
+                document.getElementById('result-image').src = newImg.src
             }
             document.getElementById("latex-view").innerHTML = latex
 
