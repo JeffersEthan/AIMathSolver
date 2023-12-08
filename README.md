@@ -1,5 +1,17 @@
 # AIMathSolver
 
+## Deployment Instructions 
+
+To run this there is a few things that have to be done since files are too large to store on the repo directly. 
+
+First, clone the detectron2 repo into the web directory
+```git clone https://github.com/facebookresearch/detectron2.git```
+
+Seconds, go to the release page in this github and download the model_weights.pth file and store that in the 
+web directory as well. 
+
+Lastly, follow Development Instructions below to start application. 
+
 ## Development Instructions
 
 The web server is tightly coupled with Detectron2 and all of its dependencies. To make the development cycle easier, we used Docker to encapsulate all of the dependencies within a container. 
