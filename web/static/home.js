@@ -6,6 +6,7 @@ function initDrawingArea() {
     const canvas = document.getElementsByTagName('canvas')[0];
     const context = canvas.getContext('2d');
     context.fillStyle = colorLine;
+    context.lineWidth = 5;
 
     let source = [];
     let isDragging = false;
@@ -73,9 +74,11 @@ function draw(source, target, canvas) {
     const context = canvas.getContext('2d');
 
     if (erase === true) {
-        context.globalCompositeOperation = 'destination-out';
-        context.arc(target[0], target[1], 5, 0, 2 * Math.PI);
+        context.beginPath();
+        context.arc(target[0], target[1], 20, 0, 2 * Math.PI);
+        context.fillStyle = "#ffffff";
         context.fill();
+        context.closePath();
     } else {
         context.globalCompositeOperation = 'source-over';
         context.beginPath();
@@ -383,13 +386,6 @@ function submitImage() {
             dialog.close();
         });
     }
-
-}
-
-function loadHomePage() {
-    initDrawingArea()
-    sideBarActivity()
-    submitImage()
 
 }
 

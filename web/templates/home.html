@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/home.css">
+    <link rel="stylesheet" href="../static/title.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="../static/home.js" type="application/javascript"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -18,7 +19,9 @@
     <button id="close-button">Close</button>
 </dialog>
 <div id="loading-circle"></div>
-<div class="header flex-display">Write a math equation below</div>
+<div class="header flex-display">
+    <p>Write your math problem below</p>
+</div>
 <div class="content">
     <div class="sidebar">
         <div id="erase" class="icon icon-unselected">
@@ -34,14 +37,14 @@
             <i class="material-icons">close</i> <!-- clear canvas -->
         </div>
     </div>
-    <canvas width="1400" height="600"></canvas> <!-- todo dimensions are currently hard coded -->
+    <canvas width="1400" height="670"></canvas> <!-- todo dimensions are currently hard coded -->
 </div>
 <div class="footer">
-    <button id="submit-button">Submit</button>
+    <button class="blueButton" id="submit-button">Submit</button>
 </div>
 <div id="width-selector" class="no-display">
     <label for="width-adjustment">Line Width</label>
-    <input type="range" id="width-adjustment" name="width" min="0.1" max="8" value="1">
+    <input type="range" id="width-adjustment" name="width" min="4" max="10" value="5">
 </div>
 </body>
 </html>

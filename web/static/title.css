@@ -1,4 +1,4 @@
-#getStarted, #howTo {
+.greenButton, .blueButton {
     min-width: 187px;
     min-height: 47px;
     border-radius: 5px;
@@ -7,30 +7,33 @@
     font-weight: bold;
 }
 
-#getStarted {
+.greenButton {
     background-color: #5DBB37;
 }
 
-#howTo {
+.blueButton {
     background-color: #3897f0;
 }
 
-#getStarted:hover {
+.greenButton:hover {
     background-color: #8EE56A;
     cursor: pointer;
 }
 
-#howTo:hover {
+.blueButton:hover {
     background-color: #88C1F6;
     cursor: pointer;
 }
 
 #allElements {
+    position: relative;
+    top: 23vh;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: "Roboto Mono", monospace;
+    user-select: none;
 }
 
 #title {
@@ -54,11 +57,5 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
+    font-family: "Roboto Mono", monospace;
 }

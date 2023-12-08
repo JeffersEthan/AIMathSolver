@@ -8,7 +8,9 @@ body {
 
 .header {
     width: 100vw;
-    height: 10vh;
+    height: 7vh;
+    font-size: 1.2em;
+    font-weight: 500;
 }
 
 .content {
@@ -19,7 +21,7 @@ body {
     align-items: center;
     column-gap: 2vw;
 
-    height: 73vh;
+    height: 670px;
     width: 100vw;
 }
 
@@ -142,31 +144,6 @@ dialog button {
     background: rgba(169, 169, 169, 0.5); /* Light gray with 50% transparency */
     color: white;
     font-weight: bold;
-}
-
-/*::backdrop {*/
-/*  background-image: linear-gradient(*/
-/*    45deg,*/
-/*    dodgerblue,*/
-/*    lightgray*/
-/*  );*/
-/*  opacity: 0.75;*/
-/*}*/
-
-#submit-button {
-    width: 20vh;
-    height: 5vh;
-    border-radius: 5vh;
-    border-color: #8EE56A;
-    background: linear-gradient(to bottom, #8EE56A , #5DBB37);
-    color: white;
-    font-weight: bold;
-}
-
-#submit-button:hover {
-    border-color: yellow;
-    background: linear-gradient(to bottom, #5DBB37 , green);
-
 }
 
 #close-button {
